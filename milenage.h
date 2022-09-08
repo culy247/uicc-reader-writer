@@ -214,6 +214,7 @@ bool milenage_generate(const u8 *opc, const u8 *amf, const u8 *k,
    @sqn: Buffer for SQN = 48-bit sequence number
    Returns: 0 = success (sqn filled), -1 on failure
 */
+#define p(a) printf("%02hhx:%02hhx:%02hhx:%02hhx:%02hhx:%02hhx\n", (int)((a)[0]), (int)((a)[1]), (int)((a)[2]), (int)((a)[3]),(int)((a)[4]), (int)((a)[5]));
 bool milenage_auts(const u8 *opc, const u8 *k, const u8 *_rand, const u8 *auts,
                    u8 *sqn) {
   u8 amf[2] = { 0x00, 0x00 }; /* TS 33.102 v7.0.0, 6.3.3 */
@@ -226,6 +227,7 @@ bool milenage_auts(const u8 *opc, const u8 *k, const u8 *_rand, const u8 *auts,
   for (i = 0; i < 6; i++)
     sqn[i] = auts[i] ^ ak[i];
 
+  //p(sqn);
   if (!milenage_f1(opc, k, _rand, sqn, amf, NULL, mac_s) ||
       memcmp(mac_s, auts + 6, 8) != 0)
     return false;
